@@ -1,6 +1,8 @@
 Prerequisite:
-	You should have git configured on your client machine
-	Your client machine should have kube configuration completed
+
+You should have git configured on your client machine
+
+Your client machine should have kube configuration completed
 
 MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols. We will be setting up a Layer 2 Load-Balancer so that we can access our deployments from outside cluster.
 
@@ -16,7 +18,9 @@ To view the running pod for MetalLB, use below command.
 	kubectl get sa -n metallb-system 
 
 •The metallb-system/controller deployment. This is the cluster-wide controller that handles IP address assignments.
+
 •The metallb-system/speaker daemonset. This is the component that speaks the protocol(s) of your choice to make the services reachable.
+
 •Service accounts for the controller and speaker, along with the RBAC permissions that the components need to function.
 
 The installation manifest does not include a configuration file. MetalLB’s components will still start but will remain idle until you define and deploy a configmap.
