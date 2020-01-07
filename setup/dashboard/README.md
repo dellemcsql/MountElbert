@@ -1,5 +1,7 @@
 	Clone git repository using below command to your home directory
+
 git clone https://github.com/dellemcsql/MountElbert.git 
+
 cd MountElbert && git checkout
 
 	Go to dashboard folder and list all the files
