@@ -1,52 +1,45 @@
-	Clone git repository using below command to your home directory
+Prerequisite:
+	You should have git configured on your client machine
+	Your client machine should have kube configuration completed
 
-git clone https://github.com/dellemcsql/MountElbert.git 
+MetalLB is a load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols. We will be setting up a Layer 2 Load-Balancer so that we can access our deployments from outside cluster.
 
-cd MountElbert && git checkout
+	To install MetalLB, apply the manifest as shown below:
 
-	Go to dashboard folder and list all the files
- 
-	Create all the dashboard configuration ( After creating each deployment mentioned below, please run kubectl get pods -n kube-system to see the status of newly deployed pods. Once the pods creation completes then only proceed with next deployment steps.)
-o	Create influxdb deployment
+kubectl apply -f https://raw.githubusercontent.com/google/metallb/v0.7.3/manifests/metallb.yaml
 
-  kubectl create -f influxdb.yaml
+This will deploy MetalLB to your cluster, under the metallb-system namespace. 
 
-o	Create heapster deployment
+To view the running pod for MetalLB, use below command.
 
-  kubectl create -f heapster.yaml
+	kubectl get pods -n metallb-system -o wide
+	kubectl get sa -n metallb-system 
 
-o	Create Dashbord deployment
+•The metallb-system/controller deployment. This is the cluster-wide controller that handles IP address assignments.
+•The metallb-system/speaker daemonset. This is the component that speaks the protocol(s) of your choice to make the services reachable.
+•Service accounts for the controller and speaker, along with the RBAC permissions that the components need to function.
 
-  kubectl create -f dashbord.yaml
+The installation manifest does not include a configuration file. MetalLB’s components will still start but will remain idle until you define and deploy a configmap.
 
-o	Create influxdb deployment
+To install the configmap MetalLB, create the below mentioned yaml file (metallb-config.yaml) into your client and apply the same.
 
-  kubectl create -f sa_cluster_admin.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - <start-IP-range>-<end-IP-range>
 
-Verify if all pods have been created successfully 
-  
-  kubectl get pods -n kube-system
+Change the <start-IP-range> and <end-IP-range> to IP address as per your environment with free pool of IPs.
+	
+Once metallb-config.yaml is saved. Create the configmap below command:
 
-: =>  Once above steps completes successfully, proceed with be below steps to generate token for login into k8s dashboard.
-
-	Run below command to see the token for service account. Copy the Tokens details to be used in next steps.
-
-  kubectl -n kube-system describe sa dashboard-admin
-
-	Run below command to find token for dashboard login ( make sure to replace tokens details copied from above steps to the one highlighted in red)
-
-  kubectl -n kube-system describe secret dashboard-admin-token-dvrj4
+kubectl create -f metallb-config.yaml
 	 
-You will be able to see token listed as highlighted in above image. Copy and save the token to some text editor to be used in next step.
-
-	Go to any of the node IP/name in web browser as mentioned below
-
-https://<IP_Address>:32323
-
-where <IP_Address> is the IP address of your master/worker node.
- 
-
-Select the “Token” option and paste the token which you have copied in last step and proceed with SIGN IN.
-
- 
-
+Your kubernetes cluster has now been configured with MetalLB load-balancer. Now whenever a service of type “LoadBalancer” gets created for any deployments, you will be able to see an external IP address assigned to to your service. 
