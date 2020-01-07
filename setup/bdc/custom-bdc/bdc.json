@@ -1,0 +1,196 @@
+{
+    "apiVersion": "v1",
+    "metadata": {
+        "kind": "BigDataCluster",
+        "name": "me-mssql"
+    },
+    "spec": {
+        "resources": {
+            "nmnode-0": {
+                "spec": {
+                    "replicas": 3,
+                    "nodeLabel": "bdc-compute-pool"
+                }
+            },
+            "sparkhead": {
+                "spec": {
+                    "replicas": 3,
+                    "nodeLabel": "bdc-compute-pool"
+                }
+            },
+            "zookeeper": {
+                "spec": {
+                    "replicas": 3,
+                    "nodeLabel": "bdc-compute-pool"
+                }
+            },
+            "gateway": {
+                "spec": {
+                    "replicas": 1,
+                    "endpoints": [
+                        {
+                            "name": "Knox",
+                            "serviceType": "NodePort",
+                            "port": 30443
+                        }
+                    ],
+                    "nodeLabel": "bdc-compute-pool"
+                }
+            },
+            "appproxy": {
+                "spec": {
+                    "replicas": 1,
+                    "endpoints": [
+                        {
+                            "name": "AppServiceProxy",
+                            "serviceType": "NodePort",
+                            "port": 30778
+                        }
+                    ],
+                    "nodeLabel": "bdc-compute-pool"
+                }
+            },
+            "master": {
+                "metadata": {
+                    "kind": "Pool",
+                    "name": "default"
+                },
+                "spec": {
+                    "type": "Master",
+                    "replicas": 3,
+                    "endpoints": [
+                        {
+                            "name": "Master",
+                            "serviceType": "NodePort",
+                            "port": 31433
+                        },
+                        {
+                            "name": "MasterSecondary",
+                            "serviceType": "NodePort",
+                            "port": 31436
+                        }
+                    ],
+                    "settings": {
+                        "sql": {
+                            "hadr.enabled": "true"
+                        }
+                    },
+                    "nodeLabel": "bdc-master",
+                    "storage": {
+                        "data": {
+                            "className": "vxflexos",
+                            "accessMode": "ReadWriteOnce",
+                            "size": "9Ti"
+                        },
+                        "logs": {
+                            "className": "vxflexos",
+                            "accessMode": "ReadWriteOnce",
+                            "size": "3Ti"
+                        }
+                    }
+                }
+            },
+            "compute-0": {
+                "metadata": {
+                    "kind": "Pool",
+                    "name": "default"
+                },
+                "spec": {
+                    "type": "Compute",
+                    "replicas": 3,
+                    "nodeLabel": "bdc-compute-pool"
+                }
+            },
+            "data-0": {
+                "metadata": {
+                    "kind": "Pool",
+                    "name": "default"
+                },
+                "spec": {
+                    "type": "Data",
+                    "replicas": 3,
+                    "nodeLabel": "bdc-compute-pool",
+                    "storage": {
+                        "data": {
+                            "className": "vxflexos",
+                            "accessMode": "ReadWriteOnce",
+                            "size": "5Ti"
+                        },
+                        "logs": {
+                            "className": "vxflexos",
+                            "accessMode": "ReadWriteOnce",
+                            "size": "1Ti"
+                        }
+                    }
+                }
+            },
+            "storage-0": {
+                "metadata": {
+                    "kind": "Pool",
+                    "name": "default"
+                },
+                "spec": {
+                    "type": "Storage",
+                    "replicas": 3,
+                    "settings": {
+                        "spark": {
+                            "includeSpark": "true"
+                        }
+                    },
+                    "nodeLabel": "bdc-storage-pool",
+                    "storage": {
+                        "data": {
+                            "className": "vxflexos",
+                            "accessMode": "ReadWriteOnce",
+                            "size": "5Ti"
+                        },
+                        "logs": {
+                            "className": "vxflexos",
+                            "accessMode": "ReadWriteOnce",
+                            "size": "1Ti"
+                        }
+                    }
+                }
+            }
+        },
+        "services": {
+            "sql": {
+                "resources": [
+                    "master",
+                    "compute-0",
+                    "data-0",
+                    "storage-0"
+                ]
+            },
+            "hdfs": {
+                "resources": [
+                    "nmnode-0",
+                    "zookeeper",
+                    "storage-0",
+                    "sparkhead"
+                ],
+                "settings": {
+                    "hdfs-site.dfs.replication": "3"
+                }
+            },
+            "spark": {
+                "resources": [
+                    "sparkhead",
+                    "storage-0"
+                ],
+                "settings": {
+                    "spark-defaults-conf.spark.driver.memory": "8g",
+                    "spark-defaults-conf.spark.driver.cores": "2",
+                    "spark-defaults-conf.spark.executor.instances": "3",
+                    "spark-defaults-conf.spark.executor.memory": "4g",
+                    "spark-defaults-conf.spark.executor.cores": "2",
+                    "yarn-site.yarn.nodemanager.resource.memory-mb": "229376",
+                    "yarn-site.yarn.nodemanager.resource.cpu-vcores": "22",
+                    "yarn-site.yarn.scheduler.maximum-allocation-mb": "229376",
+                    "yarn-site.yarn.scheduler.maximum-allocation-vcores": "22",
+                    "yarn-site.yarn.scheduler.capacity.maximum-am-resource-percent": "0.4"
+                }
+            }
+        }
+    }
+}
