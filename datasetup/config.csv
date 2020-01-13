@@ -1,0 +1,9 @@
+table_name|pushTo
+nation|oracle
+region|oracle
+supplier|sql
+part|sql
+customer|hdfs
+partsupp|hdfs
+lineitem|hdfs
+orders|hdfs
