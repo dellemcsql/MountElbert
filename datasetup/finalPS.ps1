@@ -35,7 +35,7 @@ foreach ($c in $configs) {
         Write-Host "TPC-H Data Conversion process completed" -ForegroundColor Green
     } elseif ($executeOption -eq "alldl") {
         Write-Host "Starting TPC-H Data load process to HDFS" -ForegroundColor Cyan
-        .\uploadData.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
+        .\uploadToHDFS.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
         Write-Host "TPC-H Data load process to HDFS completed" -ForegroundColor Green 
         Start-Sleep -Seconds 2
         Write-Host "Starting TPC-H Data load process to SQL Server Instance" -ForegroundColor Cyan
@@ -47,7 +47,7 @@ foreach ($c in $configs) {
         Write-Host "TPC-H Data load process to Oracle database completed" -ForegroundColor Green
     } elseif ($executeOption -eq "dl2hdfsonly") {
         Write-Host "Starting TPC-H Data load process to HDFS" -ForegroundColor Cyan
-        .\uploadData.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
+        .\uploadToHDFS.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
         Write-Host "TPC-H Data load process to HDFS completed" -ForegroundColor Green
     } elseif ($executeOption -eq "dl2sqlonly") {
         Write-Host "Starting TPC-H Data load process to SQL Server Instance" -ForegroundColor Cyan
@@ -67,7 +67,7 @@ foreach ($c in $configs) {
         Write-Host "TPC-H Data Conversion process completed" -ForegroundColor Green 
         Start-Sleep -Seconds 2
         Write-Host "Starting TPC-H Data load process to HDFS" -ForegroundColor Cyan
-        .\uploadData.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
+        .\uploadToHDFS.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
         Write-Host "TPC-H Data load process to HDFS completed" -ForegroundColor Green
     } elseif ($executeOption -eq "dl2sql") {
         Write-Host "Starting TPC-H Data generation process" -ForegroundColor Cyan 
@@ -79,7 +79,7 @@ foreach ($c in $configs) {
         Write-Host "TPC-H Data Conversion process completed" -ForegroundColor Green 
         Start-Sleep -Seconds 2
         Write-Host "Starting TPC-H Data load process to HDFS" -ForegroundColor Cyan
-        .\uploadData.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
+        .\uploadToHDFS.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
         Write-Host "TPC-H Data load process to HDFS completed" -ForegroundColor Green 
         Start-Sleep -Seconds 2
         Write-Host "Starting TPC-H Data load process to SQL Server Instance" -ForegroundColor Cyan
@@ -95,7 +95,7 @@ foreach ($c in $configs) {
         Write-Host "TPC-H Data Conversion process completed" -ForegroundColor Green 
         Start-Sleep -Seconds 2
         Write-Host "Starting TPC-H Data load process to HDFS" -ForegroundColor Cyan
-        .\uploadData.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
+        .\uploadToHDFS.ps1 -CLUSTER_NAMESPACE $sns -SQL_MASTER_IP $sip -SQL_PASSWORD $pwd -SOURCE_LOCATION "final" -DESTINATION_LOCATION $dest 
         Write-Host "TPC-H Data load process to HDFS completed" -ForegroundColor Green 
         Start-Sleep -Seconds 2
         Write-Host "Starting TPC-H Data load process to SQL Server Instance" -ForegroundColor Cyan

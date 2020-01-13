@@ -1,10 +1,10 @@
 ﻿param(
     [Parameter(Mandatory=$True, Position=0, ValueFromPipeline=$false)]
     [System.Int32]
-    $parellelThred = 25
+    $parellelThread = 25
 )
 <#
-$parellelThred = 64
+$parellelThread = 64
 #>
 
 Function Set-PSPriority  { 
@@ -132,7 +132,7 @@ $path = Join-Path $kit "final"
 $itr = 0
 Do {
 
-    San-CSV -pt $parellelThred -path $path
+    San-CSV -pt $parellelThread -path $path
     Write-Host "Done..."
     # Collect the files
     $files = Get-ChildItem -Path $path -Filter "*.tbl" -File
