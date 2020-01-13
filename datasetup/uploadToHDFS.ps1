@@ -7,7 +7,7 @@ $CLUSTER_NAMESPACE,
 $SQL_MASTER_IP,
 [Parameter(Mandatory=$True, HelpMessage="SQL Server user password")]
 [ValidateNotNull()]
-$SQL_PASSWORD,
+$KNOX_PASSWORD,
 [Parameter(Mandatory=$True, HelpMessage="Source CSV files Location")]
 [ValidateNotNull()]
 $SOURCE_LOCATION,
@@ -19,7 +19,7 @@ $DESTINATION_LOCATION
 #write-host $SQL_PASSWORD
 $ns = $CLUSTER_NAMESPACE
 $ip = $SQL_MASTER_IP
-$pwd = $SQL_PASSWORD
+$pwd = $KNOX_PASSWORD
 $srcLoc = $SOURCE_LOCATION
 $dest = $DESTINATION_LOCATION
 
